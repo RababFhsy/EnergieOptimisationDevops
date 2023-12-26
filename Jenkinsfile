@@ -10,11 +10,6 @@ node {
             stage('check java') {
                 sh "java -version"
             }
-
-            stage('clean') {
-                sh "chmod +x mvnw"
-                sh "./mvnw -ntp clean -P-webapp"
-            }
             stage('nohttp') {
                 sh "./mvnw -ntp checkstyle:check"
             }
