@@ -1,6 +1,8 @@
 image: jhipster/jhipster:v7.9.4
 
-
+services:
+  - mysql:latest
+  
 cache:
   key: '$CI_COMMIT_REF_NAME'
   paths:
