@@ -1,7 +1,13 @@
 image: jhipster/jhipster:v7.9.4
 
 services:
-  - mysql:latest
+  - name: mysql:latest
+    alias: mysql
+
+variables:
+  # Configure mysql environment variables
+  MYSQL_DATABASE: feoptimisationenergie
+  MYSQL_ALLOW_EMPTY_PASSWORD: yes
   
 cache:
   key: '$CI_COMMIT_REF_NAME'
