@@ -1,8 +1,4 @@
 image: jhipster/jhipster:v7.9.4
-
-services:
-  - name: mysql:latest
-    alias: mysql
   
 cache:
   key: '$CI_COMMIT_REF_NAME'
@@ -59,6 +55,19 @@ maven-test:
       - target/failsafe-reports
       - target/site
     expire_in: 1 day
+
+mysql:
+  <<: *default-cache
+  stage: mysql
+  variables:
+    MYSQL_DATABASE: feoptimisationenergie
+    MYSQL_ROOT_PASSWORD: ''
+    MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    DB_USERNAME: $DB_USERNAME
+    DB_PASSWORD: $DB_PASSWORD
+    DB_HOST: 'mysql'
+  services:
+    - mysql:5.7
 
 frontend-test:
   stage: test
