@@ -57,8 +57,7 @@ maven-test:
     expire_in: 1 day
 
 mysql:
-  <<: *default-cache
-  stage: mysql
+  stage: test
   variables:
     MYSQL_DATABASE: feoptimisationenergie
     MYSQL_ROOT_PASSWORD: ''
@@ -68,6 +67,11 @@ mysql:
     DB_HOST: 'mysql'
   services:
     - mysql:5.7
+  script:
+    - echo "SELECT 'OK';" | mysql --user="$DB_USERNAME" --password="$DB_PASSWORD" --host="$DB_HOST" "$MYSQL_DATABASE"
+    - sleep 20
+    - bundle exec rake db:create db:migrate db:seed
+    - bundle exec rails assets:precompile
 
 frontend-test:
   stage: test
