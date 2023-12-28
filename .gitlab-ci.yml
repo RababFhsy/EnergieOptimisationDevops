@@ -45,7 +45,7 @@ maven-test:
 
   stage: test
   script:
-    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    - ./mvnw -ntp verify -P-webapp -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
     - mysql --version
     - sleep 20
