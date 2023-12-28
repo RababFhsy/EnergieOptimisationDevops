@@ -1,5 +1,6 @@
 image: jhipster/jhipster:v7.9.4
 
+  
 cache:
   key: '$CI_COMMIT_REF_NAME'
   paths:
@@ -13,7 +14,6 @@ stages:
   - release
   - deploy
 before_script:
-    - chmod +x mvnw
     - export MAVEN_USER_HOME=`pwd`/.maven
     - ./mvnw com.github.eirslett:frontend-maven-plugin:install-node-and-npm -DnodeVersion=v10.13.0 -DnpmVersion=6.4.1 -Dmaven.repo.local=$MAVEN_USER_HOME
     - ./mvnw com.github.eirslett:frontend-maven-plugin:npm -Dmaven.repo.local=$MAVEN_USER_HOME
@@ -36,7 +36,7 @@ maven-compile:
 maven-test:
   services:
     - docker:dind
-
+    - mysql:5.7
   variables:
     # Instruct Testcontainers to use the daemon of DinD.
     DOCKER_HOST: 'tcp://docker:2375'
@@ -46,6 +46,15 @@ maven-test:
   stage: test
   script:
     - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
+    - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
+    - mysql --version
+    - sleep 20
+    - docker login -u helk1111 -p mK@P-3k_pf6.hNA
+    - docker pull mysql:5.7
+    - docker run --name feoptimisationenergie -d -p 3304:3306 -it -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:5.7
+    - mysql --protocol=tcp -u root -P 3304
+    - create database feoptimisationenergie;
+    - use feoptimisationenergie;
   artifacts:
     reports:
       junit:
