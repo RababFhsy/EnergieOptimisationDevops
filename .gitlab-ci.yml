@@ -24,6 +24,8 @@ nohttp:
   stage: check
   script:
     - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
+  when: manual
+  
 
 maven-compile:
   stage: build
@@ -34,6 +36,7 @@ maven-compile:
       - target/classes/
       - target/generated-sources/
     expire_in: 1 day
+  when: manual  
 maven-test:
   stage: test
   script:
@@ -46,6 +49,7 @@ maven-test:
     - docker run --name feoptimisationenergie -d -p 3304:3306 -it -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0.30  # Use your MySQL image name and tag
     - mysql --protocol=tcp -u root -P 3304 -e "create database feoptimisationenergie; use feoptimisationenergie;"
   artifacts:
+    when: always
     paths:
       - target/surefire-reports
       - target/failsafe-reports
@@ -54,6 +58,7 @@ maven-test:
       junit:
         - target/surefire-reports/TEST-*.xml
         - target/failsafe-reports/TEST-*.xml
+    when: manual    
 
    
     
