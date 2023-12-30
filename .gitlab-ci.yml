@@ -48,8 +48,10 @@ maven-test:
   artifacts:
     reports:
       junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
+      - target/surefire-reports/*.xml
+      - target/failsafe-reports/*.xml
+      - target/surefire-reports/*.txt
+      - target/failsafe-reports/*.txt
     paths:
       - target/surefire-reports
       - target/failsafe-reports
