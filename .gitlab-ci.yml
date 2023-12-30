@@ -25,7 +25,6 @@ nohttp:
   script:
     - ./mvnw -ntp checkstyle:check -Dmaven.repo.local=$MAVEN_USER_HOME
   when: manual
-  
 
 maven-compile:
   stage: build
@@ -36,7 +35,8 @@ maven-compile:
       - target/classes/
       - target/generated-sources/
     expire_in: 1 day
-  when: manual  
+  when: manual
+
 maven-test:
   stage: test
   script:
@@ -49,7 +49,6 @@ maven-test:
     - docker run --name feoptimisationenergie -d -p 3304:3306 -it -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0.30  # Use your MySQL image name and tag
     - mysql --protocol=tcp -u root -P 3304 -e "create database feoptimisationenergie; use feoptimisationenergie;"
   artifacts:
-    when: always
     paths:
       - target/surefire-reports
       - target/failsafe-reports
@@ -58,11 +57,7 @@ maven-test:
       junit:
         - target/surefire-reports/TEST-*.xml
         - target/failsafe-reports/TEST-*.xml
-    when: manual    
-
-   
-    
-
+    when: manual
 
 frontend-test:
   stage: test
@@ -86,15 +81,3 @@ maven-package:
       - target/*.jar
       - target/classes
     expire_in: 1 day
-
-# Uncomment the following line to use gitlabs container registry. You need to adapt the REGISTRY_URL in case you are not using gitlab.com
-#docker-push:
-#    stage: release
-#    variables:
-#        REGISTRY_URL: registry.gitlab.com
-#        IMAGE_TAG: $CI_REGISTRY_IMAGE:$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHA
-#    dependencies:
-#        - maven-package
-#    script:
-#        - ./mvnw -ntp jib:build -Pprod -Djib.to.image=$IMAGE_TAG -Djib.to.auth.username=gitlab-ci-token  -Djib.to.auth.password=$CI_BUILD_TOKEN -Dmaven.repo.local=$MAVEN_USER_HOME
-
