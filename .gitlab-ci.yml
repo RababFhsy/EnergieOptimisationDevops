@@ -34,21 +34,31 @@ maven-compile:
       - target/classes/
       - target/generated-sources/
     expire_in: 1 day
+
 maven-test:
+  services:
+    - docker:dind
+
+  variables:
+    # Instruct Testcontainers to use the daemon of DinD.
+    DOCKER_HOST: 'tcp://docker:2375'
+    # Improve performance with overlayfs.
+    DOCKER_DRIVER: overlay2
+
   stage: test
   script:
     - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
   artifacts:
-    reports:
-      junit:
-        - target/surefire-reports/TEST-*.xml
-        - target/failsafe-reports/TEST-*.xml
     paths:
       - target/surefire-reports
       - target/failsafe-reports
       - target/site
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+    
     expire_in: 1 day
-
 
    
     
