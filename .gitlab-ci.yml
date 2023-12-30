@@ -37,12 +37,12 @@ maven-compile:
 maven-test:
   stage: test
   script:
-    - ./mvnw -ntp verify -P-webapp  -Dmaven.repo.local=$MAVEN_USER_HOME
-    - sleep 20
+    - ./mvnw -ntp verify -P-webapp -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
     - docker login -u helk1111 -p mK@P-3k_pf6.hNA
     - docker pull mysql:8.0.30  # Use your MySQL image name and tag
     - docker run --name feoptimisationenergie -d -p 3304:3306 -it -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0.30  # Use your MySQL image name and tag
-    - mysql --protocol=tcp -u root -P 3304 -e "create database feoptimisationenergie; use feoptimisationenergie;"
+    - timeout 15s bash -c 'until docker exec feoptimisationenergie mysqladmin ping; do sleep 1; done'
+    - docker exec feoptimisationenergie mysql -u root -e "create database feoptimisationenergie;"
   artifacts:
     paths:
       - target/surefire-reports
