@@ -34,15 +34,7 @@ maven-compile:
       - target/classes/
       - target/generated-sources/
     expire_in: 1 day
-
 maven-test:
-  services:
-    - docker:dind
-    - mysql:5.7
-  variables:
-    DOCKER_HOST: 'tcp://docker:2375'
-    DOCKER_DRIVER: overlay2
-
   stage: test
   script:
     - ./mvnw -ntp verify -P-webapp -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
@@ -50,8 +42,8 @@ maven-test:
     - mysql --version
     - sleep 20
     - docker login -u helk1111 -p mK@P-3k_pf6.hNA
-    - docker pull mysql:5.7
-    - docker run --name feoptimisationenergie -d -p 3304:3306 -it -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:5.7
+    - docker pull mysql:8.0.30  # Use your MySQL image name and tag
+    - docker run --name feoptimisationenergie -d -p 3304:3306 -it -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0.30  # Use your MySQL image name and tag
     - mysql --protocol=tcp -u root -P 3304 -e "create database feoptimisationenergie; use feoptimisationenergie;"
   artifacts:
     reports:
@@ -63,6 +55,7 @@ maven-test:
       - target/failsafe-reports
       - target/site
     expire_in: 1 day
+
 
 frontend-test:
   stage: test
