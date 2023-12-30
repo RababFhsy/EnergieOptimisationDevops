@@ -46,15 +46,15 @@ maven-test:
     - docker run --name feoptimisationenergie -d -p 3304:3306 -it -e MYSQL_ALLOW_EMPTY_PASSWORD=true mysql:8.0.30  # Use your MySQL image name and tag
     - mysql --protocol=tcp -u root -P 3304 -e "create database feoptimisationenergie; use feoptimisationenergie;"
   artifacts:
-    reports:
-      junit:
-      - target/surefire-reports/*.xml
-      - target/failsafe-reports/*.xml
-      
-    paths:
+     paths:
       - target/surefire-reports
       - target/failsafe-reports
       - target/site
+    reports:
+      junit:
+        - target/surefire-reports/TEST-*.xml
+        - target/failsafe-reports/TEST-*.xml
+   
     
 
 
