@@ -50,13 +50,12 @@ maven-test:
       junit:
       - target/surefire-reports/*.xml
       - target/failsafe-reports/*.xml
-      - target/surefire-reports/*.txt
-      - target/failsafe-reports/*.txt
+      
     paths:
       - target/surefire-reports
       - target/failsafe-reports
       - target/site
-    expire_in: 1 day
+    
 
 
 frontend-test:
