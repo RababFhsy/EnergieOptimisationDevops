@@ -37,9 +37,7 @@ maven-compile:
 maven-test:
   stage: test
   script:
-    - ./mvnw -ntp verify -P-webapp -DskipTests -Dmaven.repo.local=$MAVEN_USER_HOME
-    - apt-get update && apt-get install -y git curl libmcrypt-dev default-mysql-client
-    - mysql --version
+    - ./mvnw -ntp verify -P-webapp  -Dmaven.repo.local=$MAVEN_USER_HOME
     - sleep 20
     - docker login -u helk1111 -p mK@P-3k_pf6.hNA
     - docker pull mysql:8.0.30  # Use your MySQL image name and tag
