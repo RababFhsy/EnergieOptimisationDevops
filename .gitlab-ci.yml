@@ -36,14 +36,18 @@ maven-compile:
     expire_in: 1 day
 
 maven-test:
-  image: maven:latest
-  stage: test
   services:
-    - name: docker:19.03.12-dind
-      alias: docker
+    - docker:dind
+
+  variables:
+    # Instruct Testcontainers to use the daemon of DinD.
+    DOCKER_HOST: 'tcp://docker:2375'
+    # Improve performance with overlayfs.
+    DOCKER_DRIVER: overlay2
+
+  stage: test
   script:
-    - docker-compose up -d
-    - ./mvnw verify -P-webapp
+    - ./mvnw -ntp verify -P-webapp -Dmaven.repo.local=$MAVEN_USER_HOME
   artifacts:
     paths:
       - target/surefire-reports
@@ -53,7 +57,12 @@ maven-test:
       junit:
         - target/surefire-reports/TEST-*.xml
         - target/failsafe-reports/TEST-*.xml
+
     expire_in: 1 day
+
+
+
+
 
 frontend-test:
   stage: test
